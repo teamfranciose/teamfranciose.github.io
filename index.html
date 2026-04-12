@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎉 Franciose Family Adventures</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #F7F8FF;
+      min-height: 100vh;
+      color: #2D2D3A;
+    }
+
+    /* ── Header ─────────────────────────────────────────── */
+    .header {
+      background: linear-gradient(120deg,
+        #FFB3C6 0%, #FFCBA4 18%, #FFF5B4 36%,
+        #B5EDD7 54%, #B4D4FF 72%, #D4B8F0 90%, #FFB3C6 100%);
+      background-size: 200% 200%;
+      animation: gradShift 12s ease infinite;
+      padding: 1.4rem 1.5rem 1.1rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 3px 18px rgba(0,0,0,0.10);
+    }
+    @keyframes gradShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .header h1 {
+      font-size: 2rem; font-weight: 900; color: #4A2D6B;
+      letter-spacing: -0.5px; text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+    }
+    .header p    { color: #7A5A9A; font-size: 0.88rem; margin-top: 0.15rem; font-weight: 600; }
+    .header-sub  { font-size: 0.76rem; color: #9A7ABB; margin-top: 0.1rem; }
+
+    /* header action buttons */
+    .hdr-btns {
+      position: absolute; top: 1rem; right: 1rem;
+      display: flex; gap: 0.4rem;
+    }
+    .hdr-btn {
+      background: rgba(255,255,255,0.55);
+      border: none; border-radius: 50%;
+      width: 34px; height: 34px; font-size: 0.95rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .hdr-btn:hover { background: rgba(255,255,255,0.85); }
+    .hdr-btn.spinning { animation: spin 0.8s linear infinite; }
+
+    /* ── Settings Panel ──────────────────────────────────── */
+    .settings-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,8,20,0.5); z-index: 600;
+      align-items: flex-start; justify-content: flex-end;
+      padding: 1rem; backdrop-filter: blur(3px);
+    }
+    .settings-overlay.open { display: flex; }
+    .settings-panel {
+      background: white; border-radius: 20px;
+      width: 320px; padding: 1.4rem;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.25);
+      margin-top: 3.5rem;
+    }
+    .settings-panel h3 { font-size: 1rem; font-weight: 800; color: #2D2D3A; margin-bottom: 1rem; }
+    .settings-section { margin-bottom: 1.1rem; }
+    .settings-label { font-size: 0.78rem; font-weight: 700; color: #888; margin-bottom: 0.35rem; display: block; }
+    .settings-input {
+      width: 100%; padding: 0.45rem 0.75rem;
+      border-radius: 10px; border: 1.5px solid #E0E0F0;
+      font-family: 'Nunito', sans-serif; font-size: 0.82rem;
+    }
+    .settings-input:focus { outline: none; border-color: #C0B0E0; }
+    .settings-row { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+    .settings-btn {
+      flex: 1; padding: 0.45rem 0;
+      border-radius: 10px; border: none;
+      font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.82rem;
+      cursor: pointer; transition: opacity 0.15s;
+    }
+    .settings-btn:hover { opacity: 0.85; }
+    .settings-btn.primary { background: #D4B8F0; color: #4A2D6B; }
+    .settings-btn.danger  { background: #FFD0C8; color: #8C2A18; }
+    .settings-divider { height: 1px; background: #F0F0F8; margin: 0.9rem 0; }
+    .settings-key-status {
+      font-size: 0.76rem; color: #22A060; font-weight: 700;
+      display: flex; align-items: center; gap: 0.3rem; margin-top: 0.35rem;
+    }
+    .settings-key-status.none { color: #AAA; }
+
+    /* ── Tabs ────────────────────────────────────────────── */
+    .tabs-wrap {
+      background: white; position: sticky; top: 118px;
+      z-index: 190; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .tabs-scroll {
+      display: flex; gap: 0.4rem; padding: 0.6rem 1rem;
+      overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;
+    }
+    .tabs-scroll::-webkit-scrollbar { display: none; }
+    .tab {
+      padding: 0.42rem 0.95rem; border-radius: 20px;
+      border: 2px solid transparent; cursor: pointer;
+      font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.81rem;
+      white-space: nowrap; transition: all 0.18s ease;
+      background: #F3F4FB; color: #888;
+    }
+    .tab:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,0.10); }
+    .tab.active { border-color: transparent; box-shadow: 0 3px 12px rgba(0,0,0,0.14); transform: translateY(-1px); }
+
+    /* ── Cards ───────────────────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.2rem; padding: 1.4rem;
+      max-width: 1440px; margin: 0 auto;
+    }
+    .card {
+      background: white; border-radius: 22px; overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex; flex-direction: column;
+    }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 10px 28px rgba(0,0,0,0.13); }
+
+    .card-img-wrap {
+      position: relative; height: 175px;
+      overflow: hidden; cursor: pointer; flex-shrink: 0;
+    }
+    .card-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: opacity 0.4s ease, transform 0.3s ease;
+      display: block;
+    }
+    .card-img-wrap:hover img { transform: scale(1.03); }
+    .card-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center; font-size: 3.2rem;
+    }
+    .gallery-hint {
+      position: absolute; bottom: 8px; right: 8px;
+      background: rgba(0,0,0,0.48); color: white;
+      font-size: 0.67rem; font-weight: 700;
+      padding: 0.18rem 0.5rem; border-radius: 8px;
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .card-img-wrap:hover .gallery-hint { opacity: 1; }
+    /* star badge for cover images */
+    .cover-star {
+      position: absolute; top: 8px; left: 8px;
+      background: rgba(255,200,0,0.92); color: #5A3800;
+      font-size: 0.68rem; font-weight: 800;
+      padding: 0.18rem 0.5rem; border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+    }
+    /* photo count badge */
+    .photo-count {
+      position: absolute; top: 8px; right: 8px;
+      background: rgba(0,0,0,0.45); color: white;
+      font-size: 0.67rem; font-weight: 700;
+      padding: 0.18rem 0.48rem; border-radius: 8px;
+    }
+
+    .card-body { padding: 0.9rem 1rem 1rem; flex: 1; display: flex; flex-direction: column; }
+    .card-name { font-weight: 800; font-size: 0.96rem; color: #1E1E2E; line-height: 1.3; margin-bottom: 0.42rem; }
+    .badge { display: inline-block; padding: 0.17rem 0.62rem; border-radius: 12px; font-size: 0.71rem; font-weight: 700; margin-bottom: 0.55rem; }
+    .card-meta { display: flex; gap: 0.7rem; flex-wrap: wrap; font-size: 0.79rem; color: #555; margin-bottom: 0.45rem; }
+    .card-meta span { display: flex; align-items: center; gap: 0.2rem; }
+    .price-note { font-size: 0.71rem; color: #B0B0B0; margin-bottom: 0.55rem; }
+    .card-desc { font-size: 0.77rem; color: #888; line-height: 1.45; margin-bottom: 0.6rem; flex: 1; }
+    .btn-maps {
+      display: inline-block; padding: 0.36rem 0.82rem; border-radius: 12px;
+      border: none; background: #EDEFFF; color: #4D5CE0;
+      font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.77rem;
+      cursor: pointer; text-decoration: none; transition: background 0.18s; align-self: flex-start;
+    }
+    .btn-maps:hover { background: #DCE0FF; }
+
+    /* ── Loading / Error ─────────────────────────────────── */
+    .state-box {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 1rem; padding: 5rem 2rem;
+      text-align: center; color: #AAA;
+    }
+    .spinner {
+      width: 44px; height: 44px;
+      border: 4px solid #EEF0FF; border-top-color: #C7CEEA;
+      border-radius: 50%; animation: spin 0.75s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .state-box h3 { font-size: 1rem; color: #888; }
+    .state-box p  { font-size: 0.85rem; max-width: 340px; }
+    .retry-btn {
+      padding: 0.55rem 1.3rem; border-radius: 14px; border: none;
+      background: #D4B8F0; color: #4A2D6B;
+      font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer;
+    }
+
+    /* ── Modal Gallery ───────────────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,8,20,0.72); z-index: 500;
+      align-items: center; justify-content: center;
+      padding: 1rem; backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white; border-radius: 26px;
+      max-width: 680px; width: 100%; max-height: 92vh;
+      overflow: hidden; display: flex; flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.3rem 0.85rem; border-bottom: 1px solid #F0F0F8; flex-shrink: 0;
+    }
+    .modal-title { font-weight: 800; font-size: 1.05rem; color: #1E1E2E; }
+    .modal-close {
+      width: 32px; height: 32px; background: #F3F4FB; border: none; border-radius: 50%;
+      font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .modal-close:hover { background: #E8E9F8; }
+
+    .modal-img-area { position: relative; background: #111; flex-shrink: 0; }
+    .modal-img-area img { width: 100%; height: 360px; object-fit: cover; display: block; }
+    .modal-img-placeholder {
+      width: 100%; height: 260px;
+      display: flex; align-items: center; justify-content: center; font-size: 5rem;
+    }
+    /* Set as Cover button overlaid on image */
+    .set-cover-btn {
+      position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+      background: rgba(255,200,0,0.92); color: #5A3800;
+      border: none; border-radius: 20px;
+      padding: 0.45rem 1.1rem; font-family: 'Nunito', sans-serif;
+      font-weight: 800; font-size: 0.82rem; cursor: pointer;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+      transition: background 0.15s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .set-cover-btn:hover { background: rgba(255,215,0,1); transform: translateX(-50%) scale(1.04); }
+    .set-cover-btn.is-cover { background: rgba(80,180,80,0.92); color: white; cursor: default; }
+
+    .modal-counter {
+      position: absolute; bottom: 12px; right: 12px;
+      background: rgba(0,0,0,0.5); color: white;
+      font-size: 0.72rem; font-weight: 700;
+      padding: 0.2rem 0.6rem; border-radius: 10px;
+    }
+    .nav-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.88); border: none; border-radius: 50%;
+      width: 42px; height: 42px; font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.22); transition: background 0.15s;
+    }
+    .nav-btn:hover { background: white; }
+    .nav-btn.prev { left: 10px; }
+    .nav-btn.next { right: 10px; }
+
+    /* Thumbnail strip */
+    .modal-thumbs {
+      display: flex; gap: 0.45rem; padding: 0.65rem 1rem;
+      overflow-x: auto; background: #F8F9FF;
+      flex-shrink: 0; scrollbar-width: none;
+      min-height: 82px; /* always reserve space */
+    }
+    .modal-thumbs::-webkit-scrollbar { display: none; }
+    .thumb-wrap {
+      position: relative; flex-shrink: 0;
+      width: 60px; height: 60px;
+    }
+    .thumb {
+      width: 60px; height: 60px; object-fit: cover; border-radius: 10px;
+      cursor: pointer; opacity: 0.55;
+      transition: opacity 0.18s, outline 0.18s;
+      outline: 2px solid transparent; display: block;
+    }
+    .thumb:hover { opacity: 0.85; }
+    .thumb.active { opacity: 1; outline-color: #B4A0D4; }
+    .thumb.is-cover { outline-color: #F5C518; opacity: 1; }
+    /* star overlay on thumbnail */
+    .thumb-star {
+      position: absolute; top: 2px; left: 2px;
+      font-size: 0.6rem; background: rgba(245,197,24,0.92);
+      border-radius: 5px; padding: 1px 3px;
+      pointer-events: none;
+    }
+    /* loading shimmer in thumb strip */
+    .thumb-shimmer {
+      width: 60px; height: 60px; border-radius: 10px; flex-shrink: 0;
+      background: linear-gradient(90deg, #F0F0F8 25%, #E8E8F4 50%, #F0F0F8 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s infinite;
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    .modal-info { padding: 0.85rem 1.3rem 1rem; border-top: 1px solid #F0F0F8; flex-shrink: 0; }
+    .modal-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem; font-size: 0.82rem; color: #666; }
+    .modal-meta a { color: #4D5CE0; font-weight: 700; text-decoration: none; }
+    .modal-meta a:hover { text-decoration: underline; }
+
+    /* photos loading indicator in modal */
+    .photos-loading {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.5rem 1rem; font-size: 0.78rem; color: #AAA;
+      background: #F8F9FF; border-top: 1px solid #F0F0F8;
+      flex-shrink: 0;
+    }
+    .mini-spinner {
+      width: 16px; height: 16px;
+      border: 2px solid #E0E0F0; border-top-color: #C0B0E8;
+      border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0;
+    }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .header h1 { font-size: 1.5rem; }
+      .cards-grid { padding: 1rem; gap: 1rem; grid-template-columns: 1fr; }
+      .modal-img-area img { height: 250px; }
+      .settings-panel { width: 290px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="hdr-btns">
+    <button class="hdr-btn" id="refreshBtn" title="Refresh from map" onclick="refreshData()">🔄</button>
+    <button class="hdr-btn" title="Settings" onclick="toggleSettings()">⚙️</button>
+  </div>
+  <h1>🎉 Franciose Family Adventures</h1>
+</div>
+
+<!-- Settings Panel -->
+<div class="settings-overlay" id="settingsOverlay" onclick="closeSettingsIfOutside(event)">
+  <div class="settings-panel">
+    <h3>⚙️ Settings</h3>
+
+    <div class="settings-section">
+      <label class="settings-label">Google Places API Key</label>
+      <input type="text" id="apiKeyInput" class="settings-input" placeholder="AIzaSy…" />
+      <div id="keyStatus" class="settings-key-status none">No key saved — using Wikipedia photos</div>
+      <div class="settings-row">
+        <button class="settings-btn primary" onclick="saveApiKey()">💾 Save Key</button>
+        <button class="settings-btn danger"  onclick="removeApiKey()">🗑 Remove</button>
+      </div>
+      <div style="font-size:0.72rem;color:#AAA;margin-top:0.5rem;line-height:1.5">
+        Unlocks real Google Maps photos (multiple per place).<br>
+        Enable <strong>Places API (New)</strong> at console.cloud.google.com
+      </div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <div class="settings-section">
+      <label class="settings-label">Cover Images</label>
+      <div style="font-size:0.78rem;color:#888;margin-bottom:0.5rem" id="coverCount">No covers set</div>
+      <button class="settings-btn danger" onclick="clearAllCovers()" style="width:100%">🗑 Clear All Cover Selections</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs-wrap">
+  <div class="tabs-scroll" id="tabsContainer"></div>
+</div>
+
+<!-- Main content -->
+<div id="mainContent">
+  <div class="state-box">
+    <div class="spinner"></div>
+    <h3>Loading your Family Fun places…</h3>
+  </div>
+</div>
+
+<!-- Gallery Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">Place Name</span>
+      <button class="modal-close" onclick="closeGallery()">✕</button>
+    </div>
+    <div class="modal-img-area" id="modalImgArea">
+      <img id="modalMainImg" src="" alt="" style="display:none" />
+      <div id="modalPlaceholder" class="modal-img-placeholder"></div>
+      <button class="nav-btn prev" id="navPrev" onclick="shiftImage(-1)" style="display:none">◀</button>
+      <button class="nav-btn next" id="navNext" onclick="shiftImage(1)"  style="display:none">▶</button>
+      <button class="set-cover-btn" id="setCoverBtn" onclick="setCurrentAsCover()" style="display:none">⭐ Set as Cover Photo</button>
+      <div class="modal-counter" id="modalCounter" style="display:none"></div>
+    </div>
+    <!-- photos loading state -->
+    <div class="photos-loading" id="photosLoading" style="display:none">
+      <div class="mini-spinner"></div>
+      <span>Loading photos from Google Maps…</span>
+    </div>
+    <div class="modal-thumbs" id="modalThumbs"></div>
+    <div class="modal-info">
+      <div class="modal-meta" id="modalMeta"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   CONFIG
+══════════════════════════════════════════════ */
+const MAP_ID  = '1QYRnKFo9iUzwVzOaXX1eG_NmRc7URmE';
+const KML_URL = `https://www.google.com/maps/d/kml?forcekml=1&mid=${MAP_ID}`;
+const PROXIES = [
+  u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+  u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+  u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+];
+const ORIGIN = { lat: 47.6983, lng: -122.1699 }; // Totem Lake, Kirkland WA
+
+/* ── Category styles ────────────────────────── */
+const CAT_CONFIG = {
+  'Pools':                 { emoji:'🏊', bg:'#AEE8F0', fg:'#1A6B80' },
+  'Vacations':             { emoji:'🧭', bg:'#D4B8F0', fg:'#5C2D8C' },
+  'Gardens':               { emoji:'🌸', bg:'#B8ECA8', fg:'#2D7A1C' },
+  'Boats':                 { emoji:'⛵', bg:'#B0D8FF', fg:'#1C4E8C' },
+  'Museums':               { emoji:'🏛️', bg:'#FFCFA8', fg:'#8C4A1A' },
+  'City Activities':       { emoji:'🌆', bg:'#FFB8D4', fg:'#8C1A44' },
+  'Shopping':              { emoji:'🛍️', bg:'#FFF5A8', fg:'#7A6800' },
+  'Bakeries & Restaurants':{ emoji:'🍰', bg:'#FFBCB0', fg:'#8C2A18' },
+  'Playgrounds':           { emoji:'🛝', bg:'#C4F2B0', fg:'#2A7A10' },
+  'Beaches':               { emoji:'🏖️', bg:'#FAE8B8', fg:'#8C5C18' },
+};
+
+/* ── Price data ─────────────────────────────── */
+const PRICES = {
+  'Lynnwood Recreation Center':                          { price:'$5–$12',    note:'per person' },
+  'Snohomish Aquatic Center':                            { price:'$5–$10',    note:'per person' },
+  'Frye Art Museum':                                     { price:'Free',      note:'always free admission' },
+  'Seattle Art Museum':                                  { price:'~$25',      note:'adults · $20 seniors' },
+  'Seattle Asian Art Museum':                            { price:'~$14',      note:'adults' },
+  'Space Needle':                                        { price:'~$38',      note:'adults · $32 children' },
+  'Sky View Observatory - Columbia Center':              { price:'Free',      note:'public observation deck' },
+  'Beneath The Streets ticket office':                   { price:'~$22',      note:'adults · $12 children' },
+  'Ferry to Bainbridge Island':                          { price:'~$9',       note:'foot passenger one-way' },
+  'Sailing Seattle':                                     { price:'$50–$100',  note:'per person' },
+  'Argosy Cruises - Seattle Waterfront':                 { price:'$30–$50',   note:'per person' },
+  '85°C Bakery Cafe-Bellevue':                           { price:'$2–$8',     note:'per item' },
+  "Alida's Bakery":                                      { price:'$3–$12',    note:'per item' },
+  'Asian Family Market Bellevue':                        { price:'Varies',    note:'' },
+  "ROYCE' Chocolate at Bellevue Square in Bellevue":     { price:'$20–$50',   note:'per box' },
+  'Theary Cambodian Foods':                              { price:'$10–$20',   note:'per person' },
+  'Mt. Bagel':                                           { price:'$5–$15',    note:'per person' },
+  'Seattle Chinese Garden':                              { price:'~$5',       note:'suggested donation' },
+  'Wilburton Hill Park':                                 { price:'Free',      note:'' },
+  'Kids Cove @ The Square':                              { price:'Free',      note:'' },
+  'Lighthouse Park':                                     { price:'Free',      note:'' },
+  'Third Place Books Ravenna':                           { price:'Free',      note:'to browse' },
+  'Miniso USA':                                          { price:'$5–$25',    note:'per item' },
+  'Flower World':                                        { price:'Free',      note:'to browse' },
+  'Kobe Terrace':                                        { price:'Free',      note:'public park' },
+  'Green Knight Landscaping & Nursery':                  { price:'Free',      note:'to browse' },
+  'Bellevue Nursery':                                    { price:'Free',      note:'to browse' },
+  'Swansons Nursery':                                    { price:'Free',      note:'to browse' },
+  'The Whole Cat and Kaboodle':                          { price:'Free',      note:'to visit · items vary' },
+  'Leavenworth':                                         { price:'Free',      note:'to visit · lodging varies' },
+  'Chelan':                                              { price:'Free',      note:'to visit · lodging varies' },
+  'Long Beach':                                          { price:'Free',      note:'to visit · lodging varies' },
+  'Seabrook':                                            { price:'From $200', note:'per night rental' },
+  'Poulsbo':                                             { price:'Free',      note:'to visit' },
+  'Olympic National Park':                               { price:'$35',       note:'per vehicle (7-day pass)' },
+  'Mason Lake':                                          { price:'Free',      note:'public lake' },
+};
+
+/* ── Wikipedia fallback search terms ────────── */
+const WIKI_OVERRIDES = {
+  'Lynnwood Recreation Center':                      'Lynnwood, Washington',
+  'Snohomish Aquatic Center':                        'Snohomish, Washington',
+  'Kobe Terrace':                                    'Kobe Terrace Park',
+  'Flower World':                                    'Garden centre',
+  'Green Knight Landscaping & Nursery':              'Kirkland, Washington',
+  'Bellevue Nursery':                                'Bellevue, Washington',
+  'Swansons Nursery':                                'Seattle',
+  'Ferry to Bainbridge Island':                      'Bainbridge Island ferry',
+  'Sailing Seattle':                                 'Lake Union Seattle',
+  'Argosy Cruises - Seattle Waterfront':             'Elliott Bay Seattle',
+  'Sky View Observatory - Columbia Center':          'Columbia Center Seattle',
+  'Beneath The Streets ticket office':               'Seattle underground tour',
+  'The Whole Cat and Kaboodle':                      'Cat café',
+  'Miniso USA':                                      'Miniso',
+  'Third Place Books Ravenna':                       'Ravenna Seattle',
+  "Alida's Bakery":                                  'Snohomish, Washington',
+  'Asian Family Market Bellevue':                    'Bellevue, Washington',
+  "ROYCE' Chocolate at Bellevue Square in Bellevue": 'Royce confect',
+  'Theary Cambodian Foods':                          'Cambodian cuisine',
+  'Wilburton Hill Park':                             'Bellevue, Washington',
+  'Kids Cove @ The Square':                          'Bellevue Square',
+  'Lighthouse Park':                                 'Mukilteo Lighthouse',
+};
+
+/* ══════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════ */
+let allPlaces      = [];
+let activeCategory = 'All';
+let placesApiKey   = localStorage.getItem('placesApiKey') || '';
+let imgCache       = {};    // name → [url, ...]  (null = checked, no image)
+let coverImages    = JSON.parse(localStorage.getItem('coverImages') || '{}');
+let galleryName    = '';    // name of place currently open in gallery
+let galleryImages  = [];
+let galleryIndex   = 0;
+
+/* ══════════════════════════════════════════════
+   TRAVEL TIME
+══════════════════════════════════════════════ */
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 3959, r = Math.PI / 180;
+  const dLat = (lat2-lat1)*r, dLon = (lon2-lon1)*r;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*r)*Math.cos(lat2*r)*Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+function travelTime(lat, lng) {
+  const mins = Math.round(haversine(ORIGIN.lat,ORIGIN.lng,lat,lng)*1.3/42*60/5)*5;
+  if (mins < 60) return `~${mins} min`;
+  const h = Math.floor(mins/60), m = mins%60;
+  return m ? `~${h}h ${m}m` : `~${h}h`;
+}
+
+/* ══════════════════════════════════════════════
+   KML
+══════════════════════════════════════════════ */
+async function fetchKML() {
+  const t = Date.now();
+  // Bust both the inner KML URL and the proxy URL itself
+  const bustUrl = KML_URL + '&_t=' + t;
+  for (const proxy of PROXIES) {
+    try {
+      const proxyUrl = proxy(bustUrl) + (proxy(bustUrl).includes('?') ? '&' : '?') + '_cb=' + t;
+      const r = await fetch(proxyUrl, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache, no-store', 'Pragma': 'no-cache' },
+        signal: AbortSignal.timeout(9000),
+      });
+      if (r.ok) return await r.text();
+    } catch(e) {}
+  }
+  throw new Error('All proxies failed');
+}
+
+function parseKML(xml) {
+  const doc = new DOMParser().parseFromString(xml, 'text/xml');
+  const places = [];
+  doc.querySelectorAll('Folder').forEach(folder => {
+    const category = folder.querySelector(':scope > name')?.textContent?.trim() || 'Other';
+    folder.querySelectorAll('Placemark').forEach(pm => {
+      const name  = pm.querySelector('name')?.textContent?.trim() || '';
+      const desc  = pm.querySelector('description')?.textContent?.trim() || '';
+      const coords= pm.querySelector('coordinates')?.textContent?.trim() || '';
+      if (!coords) return;
+      const [lngS, latS] = coords.split(',');
+      const lat = parseFloat(latS), lng = parseFloat(lngS);
+      if (isNaN(lat)||isNaN(lng)) return;
+      const extraImgs = [];
+      let m; const rx = /<img[^>]+src=["']([^"']+)["']/gi;
+      while ((m = rx.exec(desc)) !== null) extraImgs.push(m[1]);
+      places.push({ name, category, lat, lng,
+        description: desc.replace(/<[^>]+>/g,'').trim(), extraImgs });
+    });
+  });
+  return places;
+}
+
+/* ══════════════════════════════════════════════
+   IMAGE FETCHING
+══════════════════════════════════════════════ */
+
+/* Google Places API (New) — returns up to 6 photo URLs */
+async function fetchPlacesPhotos(name, lat, lng) {
+  if (!placesApiKey) return [];
+  try {
+    const res = await fetch('https://places.googleapis.com/v1/places:searchText', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': placesApiKey,
+        'X-Goog-FieldMask': 'places.id,places.photos,places.displayName',
+      },
+      body: JSON.stringify({
+        textQuery: name,
+        locationBias: { circle: { center: { latitude: lat, longitude: lng }, radius: 300 } },
+        maxResultCount: 1,
+      }),
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    const place = data.places?.[0];
+    if (!place?.photos?.length) return [];
+    return place.photos.slice(0, 8).map(ph =>
+      `https://places.googleapis.com/v1/${ph.name}/media?maxHeightPx=900&key=${placesApiKey}`
+    );
+  } catch(e) { return []; }
+}
+
+/* Wikipedia fallback — single image */
+async function fetchWikiImage(name) {
+  const override = WIKI_OVERRIDES[name];
+  const terms = override
+    ? [override, name.replace(/[-–—].*/,'').replace(/\bat\b.*/i,'').replace(/[®™]/g,'').trim()]
+    : [name.replace(/[-–—].*/,'').replace(/\bat\b.*/i,'').replace(/[®™]/g,'').trim()];
+  for (const term of terms) {
+    try {
+      const r = await fetch(
+        `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term)}`,
+        { signal: AbortSignal.timeout(5000) }
+      );
+      if (!r.ok) continue;
+      const d = await r.json();
+      if (d.thumbnail?.source) return d.thumbnail.source.replace(/\/\d+px-/, '/600px-');
+    } catch(e) {}
+  }
+  return null;
+}
+
+/* Main resolver — uses cache, tries Places API then Wikipedia */
+async function resolveImages(place) {
+  if (imgCache[place.name] !== undefined) return imgCache[place.name] || [];
+  const imgs = [...place.extraImgs];
+
+  if (placesApiKey) {
+    const ph = await fetchPlacesPhotos(place.name, place.lat, place.lng);
+    imgs.push(...ph);
+  }
+  if (imgs.length === 0) {
+    const wiki = await fetchWikiImage(place.name);
+    if (wiki) imgs.push(wiki);
+  }
+  imgCache[place.name] = imgs.length ? imgs : null;
+  return imgs;
+}
+
+/* ══════════════════════════════════════════════
+   COVER IMAGES
+══════════════════════════════════════════════ */
+function saveCoverImages() {
+  localStorage.setItem('coverImages', JSON.stringify(coverImages));
+  updateCoverCount();
+}
+
+function setCoverImage(name, url) {
+  coverImages[name] = url;
+  saveCoverImages();
+  refreshCardImage(name);
+}
+
+function updateCoverCount() {
+  const n = Object.keys(coverImages).length;
+  const el = document.getElementById('coverCount');
+  if (el) el.textContent = n > 0 ? `${n} cover${n>1?'s':''} set` : 'No covers set';
+}
+
+/* Refresh just one card's image after cover change */
+function refreshCardImage(name) {
+  const safeId = 'c-' + name.replace(/[^a-z0-9]/gi,'_');
+  const wrap   = document.getElementById(`iw-${safeId}`);
+  if (!wrap) return;
+
+  // Update or add star badge
+  const existingStar = wrap.querySelector('.cover-star');
+  if (coverImages[name]) {
+    if (!existingStar) {
+      const star = document.createElement('div');
+      star.className = 'cover-star';
+      star.textContent = '⭐ Cover';
+      wrap.appendChild(star);
+    }
+    // Update the displayed image to the cover
+    const imgEl = wrap.querySelector('img');
+    if (imgEl) imgEl.src = coverImages[name];
+  } else {
+    if (existingStar) existingStar.remove();
+  }
+}
+
+/* ══════════════════════════════════════════════
+   RENDER
+══════════════════════════════════════════════ */
+function catConfig(cat) {
+  return CAT_CONFIG[cat] || { emoji:'📍', bg:'#E8E8F5', fg:'#444' };
+}
+
+function renderTabs(categories) {
+  const all = ['All', ...categories];
+  document.getElementById('tabsContainer').innerHTML = all.map(cat => {
+    const cfg = catConfig(cat), active = cat === activeCategory;
+    const style = active
+      ? `background:${cat==='All'?'#E8E8F5':cfg.bg};color:${cat==='All'?'#444':cfg.fg};`
+      : '';
+    return `<button class="tab${active?' active':''}" style="${style}"
+              data-category="${cat.replace(/"/g,'&quot;')}" onclick="setCategory(this.dataset.category)">
+              ${cat==='All'?'🗺️':cfg.emoji} ${cat}
+            </button>`;
+  }).join('');
+}
+
+function setCategory(cat) {
+  activeCategory = cat;
+  renderTabs([...new Set(allPlaces.map(p=>p.category))].sort());
+  renderPlaces();
+}
+
+function renderPlaces() {
+  const filtered = activeCategory === 'All'
+    ? allPlaces
+    : allPlaces.filter(p => p.category === activeCategory);
+  const content = document.getElementById('mainContent');
+  if (!filtered.length) {
+    content.innerHTML = `<div class="state-box"><h3>No places in this category yet.</h3></div>`;
+    return;
+  }
+  const grid = document.createElement('div');
+  grid.className = 'cards-grid';
+  filtered.forEach(p => grid.appendChild(makeCard(p)));
+  content.innerHTML = '';
+  content.appendChild(grid);
+  filtered.forEach(p => loadCardImage(p));
+}
+
+function makeCard(place) {
+  const cfg    = catConfig(place.category);
+  const tt     = travelTime(place.lat, place.lng);
+  const pi     = PRICES[place.name];
+  const safeId = 'c-' + place.name.replace(/[^a-z0-9]/gi,'_');
+  const mapsUrl= `https://www.google.com/maps/search/${encodeURIComponent(place.name)}/@${place.lat},${place.lng},15z`;
+  const hasCover = !!coverImages[place.name];
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.id = safeId;
+  card.innerHTML = `
+    <div class="card-img-wrap" id="iw-${safeId}" data-placename="${place.name.replace(/"/g,'&quot;')}" onclick="openGallery(this.dataset.placename)">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,${cfg.bg},${cfg.bg}99)">
+        <span>${cfg.emoji}</span>
+      </div>
+      ${hasCover ? '<div class="cover-star">⭐ Cover</div>' : ''}
+      <div class="gallery-hint">🖼 View photos</div>
+    </div>
+    <div class="card-body">
+      <div class="card-name">${place.name}</div>
+      <span class="badge" style="background:${cfg.bg};color:${cfg.fg}">${cfg.emoji} ${place.category}</span>
+      <div class="card-meta">
+        <span>🚗 ${tt}</span>
+        <span>💰 ${pi ? pi.price : '–'}</span>
+      </div>
+      ${pi?.note ? `<div class="price-note">${pi.note}</div>` : ''}
+      ${place.description ? `<div class="card-desc">${place.description.slice(0,110)}${place.description.length>110?'…':''}</div>` : ''}
+      <a href="${mapsUrl}" target="_blank" class="btn-maps" onclick="event.stopPropagation()">📍 Open in Maps</a>
+    </div>`;
+  return card;
+}
+
+async function loadCardImage(place) {
+  const safeId = 'c-' + place.name.replace(/[^a-z0-9]/gi,'_');
+  const wrap   = document.getElementById(`iw-${safeId}`);
+  if (!wrap) return;
+
+  // Show cover image immediately if we have one cached
+  const coverUrl = coverImages[place.name];
+  const imgs     = await resolveImages(place);
+  if (!imgs.length && !coverUrl) return;
+
+  const displayUrl = coverUrl || imgs[0];
+
+  const img = document.createElement('img');
+  img.src   = displayUrl;
+  img.alt   = place.name;
+  img.style.opacity    = '0';
+  img.style.transition = 'opacity 0.4s ease';
+  img.onload  = () => { img.style.opacity = '1'; };
+  img.onerror = () => { img.remove(); };
+
+  // Add photo count badge if multiple images
+  let countBadge = '';
+  if (imgs.length > 1) {
+    const badge = document.createElement('div');
+    badge.className = 'photo-count';
+    badge.textContent = `${imgs.length} 📷`;
+    wrap.appendChild(badge);
+  }
+
+  const placeholder = wrap.querySelector('.card-placeholder');
+  if (placeholder) placeholder.replaceWith(img);
+  else { const existing = wrap.querySelector('img'); if (existing) existing.src = displayUrl; }
+}
+
+/* ══════════════════════════════════════════════
+   GALLERY MODAL
+══════════════════════════════════════════════ */
+async function openGallery(name) {
+  const place = allPlaces.find(p => p.name === name);
+  if (!place) return;
+
+  galleryName   = name;
+  galleryImages = [];
+  galleryIndex  = 0;
+
+  // Set up modal immediately with what we have
+  document.getElementById('modalTitle').textContent = name;
+
+  const cfg  = catConfig(place.category);
+  const tt   = travelTime(place.lat, place.lng);
+  const pi   = PRICES[name];
+  const mUrl = `https://www.google.com/maps/search/${encodeURIComponent(name)}/@${place.lat},${place.lng},15z`;
+
+  document.getElementById('modalMeta').innerHTML = `
+    <span>${cfg.emoji} ${place.category}</span>
+    <span>🚗 ${tt} from Totem Lake</span>
+    ${pi ? `<span>💰 ${pi.price}${pi.note ? ' · '+pi.note : ''}</span>` : ''}
+    <a href="${mUrl}" target="_blank">📍 Open in Maps →</a>
+  `;
+
+  // If we already have cached images, show them right away
+  const cached = imgCache[name];
+  if (cached && cached.length) {
+    galleryImages = [...cached];
+    // put cover first if set
+    const cover = coverImages[name];
+    if (cover && galleryImages[0] !== cover) {
+      galleryImages = [cover, ...galleryImages.filter(u => u !== cover)];
+      galleryIndex = 0;
+    }
+    updateGalleryDisplay();
+    document.getElementById('modalOverlay').classList.add('open');
+    return;
+  }
+
+  // Not cached — open modal with placeholder and show loading
+  const placeholder = document.getElementById('modalPlaceholder');
+  placeholder.textContent = cfg.emoji;
+  placeholder.style.background = `linear-gradient(135deg, ${cfg.bg}, ${cfg.bg}88)`;
+  placeholder.style.display = 'flex';
+  document.getElementById('modalMainImg').style.display = 'none';
+  document.getElementById('navPrev').style.display = 'none';
+  document.getElementById('navNext').style.display = 'none';
+  document.getElementById('setCoverBtn').style.display = 'none';
+  document.getElementById('modalCounter').style.display = 'none';
+  document.getElementById('modalThumbs').innerHTML = '<div class="thumb-shimmer"></div><div class="thumb-shimmer"></div><div class="thumb-shimmer"></div>';
+  document.getElementById('photosLoading').style.display = 'flex';
+  document.getElementById('modalOverlay').classList.add('open');
+
+  // Fetch images async
+  const imgs = await resolveImages(place);
+  document.getElementById('photosLoading').style.display = 'none';
+
+  if (galleryName !== name) return; // modal was closed/changed while loading
+
+  galleryImages = [...imgs];
+  const cover   = coverImages[name];
+  if (cover && galleryImages.length && galleryImages[0] !== cover) {
+    galleryImages = [cover, ...galleryImages.filter(u => u !== cover)];
+  }
+
+  updateGalleryDisplay();
+}
+
+function updateGalleryDisplay() {
+  const mainImg     = document.getElementById('modalMainImg');
+  const placeholder = document.getElementById('modalPlaceholder');
+  const counter     = document.getElementById('modalCounter');
+  const prevBtn     = document.getElementById('navPrev');
+  const nextBtn     = document.getElementById('navNext');
+  const coverBtn    = document.getElementById('setCoverBtn');
+  const thumbs      = document.getElementById('modalThumbs');
+
+  const hasImgs = galleryImages.length > 0;
+
+  if (hasImgs) {
+    mainImg.src           = galleryImages[galleryIndex];
+    mainImg.style.display = 'block';
+    placeholder.style.display = 'none';
+    coverBtn.style.display    = 'block';
+  } else {
+    mainImg.style.display     = 'none';
+    placeholder.style.display = 'flex';
+    coverBtn.style.display    = 'none';
+  }
+
+  const multi = galleryImages.length > 1;
+  prevBtn.style.display  = multi ? 'flex' : 'none';
+  nextBtn.style.display  = multi ? 'flex' : 'none';
+  counter.style.display  = multi ? 'block' : 'none';
+  if (multi) counter.textContent = `${galleryIndex+1} / ${galleryImages.length}`;
+
+  // Cover button state
+  const isCover = galleryImages[galleryIndex] === coverImages[galleryName];
+  if (isCover) {
+    coverBtn.textContent = '✅ Current Cover Photo';
+    coverBtn.className   = 'set-cover-btn is-cover';
+  } else {
+    coverBtn.textContent = '⭐ Set as Cover Photo';
+    coverBtn.className   = 'set-cover-btn';
+  }
+
+  // Thumbnails with star on cover
+  thumbs.innerHTML = galleryImages.map((url, i) => {
+    const isCoverThumb = url === coverImages[galleryName];
+    return `
+      <div class="thumb-wrap">
+        <img class="thumb${i===galleryIndex?' active':''}${isCoverThumb?' is-cover':''}"
+             src="${url}" onclick="setGalleryIndex(${i})" alt="" />
+        ${isCoverThumb ? '<div class="thumb-star">⭐</div>' : ''}
+      </div>`;
+  }).join('');
+}
+
+function setCurrentAsCover() {
+  if (!galleryImages.length) return;
+  const url = galleryImages[galleryIndex];
+  setCoverImage(galleryName, url);
+  updateGalleryDisplay(); // refresh star state
+}
+
+function setGalleryIndex(i) { galleryIndex = i; updateGalleryDisplay(); }
+function shiftImage(dir) {
+  galleryIndex = (galleryIndex + dir + galleryImages.length) % galleryImages.length;
+  updateGalleryDisplay();
+}
+function closeGallery() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  galleryName = '';
+}
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('modalOverlay').classList.contains('open')) return;
+  if (e.key === 'ArrowLeft')  shiftImage(-1);
+  if (e.key === 'ArrowRight') shiftImage(1);
+  if (e.key === 'Escape')     closeGallery();
+});
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) closeGallery();
+});
+
+/* ══════════════════════════════════════════════
+   SETTINGS
+══════════════════════════════════════════════ */
+function toggleSettings() {
+  const el = document.getElementById('settingsOverlay');
+  el.classList.toggle('open');
+  if (el.classList.contains('open')) {
+    document.getElementById('apiKeyInput').value = placesApiKey;
+    updateKeyStatus();
+    updateCoverCount();
+  }
+}
+function closeSettingsIfOutside(e) {
+  if (e.target === document.getElementById('settingsOverlay')) toggleSettings();
+}
+function updateKeyStatus() {
+  const el = document.getElementById('keyStatus');
+  if (placesApiKey) {
+    el.textContent = '✓ API key saved — Google Maps photos active';
+    el.className   = 'settings-key-status';
+  } else {
+    el.textContent = 'No key saved — using Wikipedia photos';
+    el.className   = 'settings-key-status none';
+  }
+}
+function saveApiKey() {
+  const val = document.getElementById('apiKeyInput').value.trim();
+  if (!val) return;
+  placesApiKey = val;
+  localStorage.setItem('placesApiKey', val);
+  imgCache = {}; // clear so photos reload with new key
+  updateKeyStatus();
+  toggleSettings();
+  renderPlaces();
+}
+function removeApiKey() {
+  placesApiKey = '';
+  localStorage.removeItem('placesApiKey');
+  imgCache = {};
+  document.getElementById('apiKeyInput').value = '';
+  updateKeyStatus();
+  renderPlaces();
+}
+function clearAllCovers() {
+  if (!confirm('Clear all cover photo selections?')) return;
+  coverImages = {};
+  saveCoverImages();
+  imgCache = {};
+  renderPlaces();
+}
+
+/* ══════════════════════════════════════════════
+   REFRESH
+══════════════════════════════════════════════ */
+async function refreshData() {
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('spinning');
+  imgCache = {};
+  await init(true);
+  btn.classList.remove('spinning');
+}
+
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
+async function init(force = false) {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="state-box">
+      <div class="spinner"></div>
+      <h3>Loading your Family Fun places…</h3>
+    </div>`;
+
+  try {
+    const xml = await fetchKML();
+
+    allPlaces = parseKML(xml);
+    if (!allPlaces.length) throw new Error('No places found');
+
+    const cats = [...new Set(allPlaces.map(p=>p.category))].sort();
+    renderTabs(cats);
+    renderPlaces();
+    updateCoverCount();
+
+  } catch(err) {
+    console.error(err);
+    document.getElementById('mainContent').innerHTML = `
+      <div class="state-box">
+        <h3>⚠️ Couldn't load places</h3>
+        <p>Make sure your Google My Maps is set to <strong>"Anyone with the link can view"</strong>, then try again.</p>
+        <button class="retry-btn" onclick="init(true)">🔄 Try Again</button>
+      </div>`;
+    document.getElementById('tabsContainer').innerHTML = '';
+  }
+}
+
+init();
+</script>
+</body>
+</html>
