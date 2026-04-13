@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🎉 Franciose Family Adventures</title>
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#D4B8F0" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Family Adventures" />
+  <link rel="apple-touch-icon" href="icons/icon.svg" />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -15,6 +23,14 @@
       color: #2D2D3A;
     }
 
+    /* ── Sticky top wrapper (header + tabs, no gap) ─────── */
+    .sticky-top {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 3px 18px rgba(0,0,0,0.10);
+    }
+
     /* ── Header ─────────────────────────────────────────── */
     .header {
       background: linear-gradient(120deg,
@@ -22,12 +38,8 @@
         #B5EDD7 54%, #B4D4FF 72%, #D4B8F0 90%, #FFB3C6 100%);
       background-size: 200% 200%;
       animation: gradShift 12s ease infinite;
-      padding: 1.4rem 1.5rem 1.1rem;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      box-shadow: 0 3px 18px rgba(0,0,0,0.10);
+      padding: 1.1rem 5rem 1.1rem 1.5rem;
+      text-align: left;
     }
     @keyframes gradShift {
       0%   { background-position: 0% 50%; }
@@ -35,8 +47,9 @@
       100% { background-position: 0% 50%; }
     }
     .header h1 {
-      font-size: 2rem; font-weight: 900; color: #4A2D6B;
+      font-size: clamp(1.35rem, 5vw, 2rem); font-weight: 900; color: #4A2D6B;
       letter-spacing: -0.5px; text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+      line-height: 1.2;
     }
     .header p    { color: #7A5A9A; font-size: 0.88rem; margin-top: 0.15rem; font-weight: 600; }
     .header-sub  { font-size: 0.76rem; color: #9A7ABB; margin-top: 0.1rem; }
@@ -98,8 +111,8 @@
 
     /* ── Tabs ────────────────────────────────────────────── */
     .tabs-wrap {
-      background: white; position: sticky; top: 118px;
-      z-index: 190; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
     .tabs-scroll {
       display: flex; gap: 0.4rem; padding: 0.6rem 1rem;
@@ -333,7 +346,8 @@
 </head>
 <body>
 
-<!-- Header -->
+<!-- Sticky header + tabs (single wrapper prevents gap) -->
+<div class="sticky-top">
 <div class="header">
   <div class="hdr-btns">
     <button class="hdr-btn" id="refreshBtn" title="Refresh from map" onclick="refreshData()">🔄</button>
@@ -375,6 +389,7 @@
 <div class="tabs-wrap">
   <div class="tabs-scroll" id="tabsContainer"></div>
 </div>
+</div><!-- /sticky-top -->
 
 <!-- Main content -->
 <div id="mainContent">
@@ -1043,6 +1058,13 @@ async function init(force = false) {
 }
 
 init();
+
+// Register service worker for PWA installability
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>

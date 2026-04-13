@@ -1,0 +1,26 @@
+{
+  "name": "Franciose Family Adventures",
+  "short_name": "Family Adventures",
+  "description": "Great places for the Franciose family to explore together",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F8FF",
+  "theme_color": "#D4B8F0",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["lifestyle", "travel"],
+  "lang": "en-US"
+}
